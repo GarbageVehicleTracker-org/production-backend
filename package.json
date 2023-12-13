@@ -1,13 +1,13 @@
 {
-  "name": "college-project-final",
+  "name": "backend",
   "version": "1.0.0",
   "description": "The backend code for the college project",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "keywords": [
-    "college-project-final",
     "backend"
   ],
   "author": "Deep Dhabal",
