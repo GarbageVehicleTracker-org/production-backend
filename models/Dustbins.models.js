@@ -1,7 +1,12 @@
 // Dustbins.models.js
+
 import mongoose from "mongoose";
 
 const dustbinSchema = new mongoose.Schema({
+  areaId: {
+    type: String,
+    required: true,
+  },
   coordinates: [
     {
       latitude: {
@@ -24,7 +29,6 @@ const dustbinSchema = new mongoose.Schema({
     default: null,
   },
 });
-
 const Dustbin = mongoose.model("Dustbin", dustbinSchema);
 
-module.exports = Dustbin;
+export default Dustbin;

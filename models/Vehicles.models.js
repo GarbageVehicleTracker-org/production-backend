@@ -20,10 +20,15 @@ const vehicleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isAvailable: {
+      type: Boolean,
+      // required: true,
+      default: true,
+    },
   },
   { timestamp: true }
 );
 
 const Vehicle = mongoose.model("Vehicle", vehicleSchema);
 
-module.exports = Vehicle;
+export default Vehicle;
