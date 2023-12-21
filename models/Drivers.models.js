@@ -27,10 +27,15 @@ const driverSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    isAvailable: {
+      type: Boolean,
+      // required: true,
+      default: true,
+    },
   },
   { timestamps: true }
 );
 
 const Driver = mongoose.model("Driver", driverSchema);
 
-module.exports = Driver;
+export default Driver;

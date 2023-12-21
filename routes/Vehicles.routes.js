@@ -14,7 +14,7 @@ vehicleRoutes.get(
   VehicleController.getVehicles
 );
 vehicleRoutes.get(
-  "/get-vehicle/:id?",
+  "/get-vehicles/:id?",
   vehicleMiddleware,
   VehicleController.getVehicles
 );

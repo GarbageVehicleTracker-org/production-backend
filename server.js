@@ -8,6 +8,7 @@ import connectToMongoDB from "./configs/MongoDB.config.js";
 import areaRoutes from "./routes/Areas.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
+import driverRoutes from "./routes/Drivers.routes.js";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 app.use("/areas", areaRoutes);
 app.use("/dustbins", dustbinRoutes);
 app.use("/vehicles", vehicleRoutes);
+app.use("/drivers", driverRoutes);
 
 server.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);
