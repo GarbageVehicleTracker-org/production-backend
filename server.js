@@ -1,20 +1,27 @@
 // server.js
 
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import connectToMongoDB from "./configs/MongoDB.config.js";
+import authMiddleware from "./middlewares/auth.middleware.js"
+import adminRoutes from "./routes/Admins.routes.js";
 import areaRoutes from "./routes/Areas.routes.js";
+import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
-import driverRoutes from "./routes/Drivers.routes.js";
-
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+app.use(
+  cors({
+    origin: "https://municipality-garbage-tracking.onrender.com",
+  })
+);
 
 const port = process.env.PORT || 5500;
 
@@ -37,10 +44,11 @@ io.on("connection", (socket) => {
 app.get("/", (req, res) => {
   res.send("My server listening");
 });
-app.use("/areas", areaRoutes);
-app.use("/dustbins", dustbinRoutes);
-app.use("/vehicles", vehicleRoutes);
-app.use("/drivers", driverRoutes);
+app.use("/areas", authMiddleware, areaRoutes);
+app.use("/dustbins", authMiddleware, dustbinRoutes);
+app.use("/vehicles", authMiddleware, vehicleRoutes);
+app.use("/drivers", authMiddleware, driverRoutes);
+app.use("/admin", authMiddleware, adminRoutes);
 
 server.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);
