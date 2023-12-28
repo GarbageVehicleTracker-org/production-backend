@@ -1,4 +1,4 @@
-// utils/adminUtils.js
+// utils/admin.utils.js
 import jwt from "jsonwebtoken";
 import Admin from "../models/Admins.models.js";
 
@@ -36,7 +36,7 @@ export const generateAdminToken = async (admin) => {
     const token = jwt.sign(
       { username: admin.username, id: admin._id },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" } // Set token expiration (adjust as needed)
+      { expiresIn: "20d" } // Set token expiration (adjust as needed)
     );
 
     return token;

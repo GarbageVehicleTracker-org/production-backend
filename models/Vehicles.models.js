@@ -1,12 +1,12 @@
-// vehicle.model.js
+// vehicles.models.js
 import mongoose from "mongoose";
 
 const vehicleSchema = new mongoose.Schema(
   {
-    id: {
+    vehicleId: {
       type: String,
       required: true,
-      unique: true,
+      unique: true, // Ensure unique index on vehicleId
     },
     capacity: {
       type: Number,
@@ -22,11 +22,10 @@ const vehicleSchema = new mongoose.Schema(
     },
     isAvailable: {
       type: Boolean,
-      // required: true,
       default: true,
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 const Vehicle = mongoose.model("Vehicle", vehicleSchema);
