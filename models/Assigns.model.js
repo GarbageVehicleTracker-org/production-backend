@@ -8,18 +8,18 @@ const assignModel = mongoose.Schema(
   {
     areaId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: Area,
+      ref: "Area",
       required: true,
     },
     driverId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: Driver,  
+      ref: "Driver",  
       unique: true,
       required: true,
     },
     vehicleId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: Vehicle,
+      ref: "Vehicle",
       required: true,
       unique: true,
     },

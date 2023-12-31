@@ -12,6 +12,7 @@ import areaRoutes from "./routes/Areas.routes.js";
 import assignRoutes from "./routes/Assigns.routes.js";
 import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
+import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
 dotenv.config();
 
@@ -49,7 +50,8 @@ app.use("/areas", authMiddleware, areaRoutes);
 app.use("/dustbins", authMiddleware, dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
-app.use("/admin", adminRoutes);
+app.use("/admins", adminRoutes);
+app.use("/users", userRoutes);
 app.use("/work", authMiddleware, assignRoutes);
 
 server.listen(port, () => {
