@@ -7,8 +7,8 @@ router.post("/register", UsersControllers.registerUser);
 router.post("/login", UsersControllers.loginUser);
 router.get("/profile", authMiddleware, UsersControllers.getUserProfile);
 router.put("/update-profile", authMiddleware, UsersControllers.updateUser);
-// router.put("/update-password", authMiddleware, UsersControllers.updatePassword);
-// router.post("/forgot-password", UsersControllers.forgotPassword);
+router.put("/update-password", authMiddleware, UsersControllers.updatePassword);
+router.post("/forgot-password", UsersControllers.forgotPassword);
 // router.post("/reset-password", UsersControllers.resetPassword);
 router.get(
   "/get-vehicles-drivers-details",

@@ -77,7 +77,7 @@ class UserController {
 
   async updateUser(req, res) {
     try {
-      const { name, phoneNumber, address, area } = req.body;
+      const { name, phoneNumber, address, area, image } = req.body;
 
       // Find the user by ID
       const user = await User.findById(req.user._id);
@@ -91,6 +91,7 @@ class UserController {
       user.phoneNumber = phoneNumber || user.phoneNumber;
       user.address = address || user.address;
       user.area = area || user.area;
+      user.image = image || user.image;
 
       // Save the updated user
       const updatedUser = await user.save();
@@ -105,11 +106,11 @@ class UserController {
   async getVehiclesDriversDetails(req, res) {
     try {
       const user = await User.findById(req.user._id).populate("area", "name");
-  
+
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-  
+
       const assign = await Assign.find({ areaId: user.area._id })
         .populate({
           path: "driverId",
@@ -119,14 +120,67 @@ class UserController {
           path: "vehicleId",
           select: "vehicleId capacity",
         });
-  
+
       res.status(200).json({ assign });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
-  
+
+  async updatePassword(req, res) {
+    try {
+      const { currentPassword, newPassword } = req.body;
+
+      // Find the user by ID
+      const user = await User.findById(req.user._id);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Check hashed password
+      const isPasswordValid = await user.checkPassword(currentPassword);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: "Invalid current password" });
+      }
+
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Update user password
+      user.password = hashedPassword;
+
+      // Save the updated user
+      const updatedUser = await user.save();
+
+      res.status(200).json({ user: updatedUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+
+      // Find the user by ID
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const token = user.generateAuthToken();
+
+      res.status(200).json({ message: "Reset password successful", token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }
 
 export default new UserController();
