@@ -30,14 +30,13 @@ app.use(
   })
 );
 
-io.origins('https://municipality-garbage-tracking.onrender.com'); // Replace with your actual frontend URL
+app.use(cors({
+  origin: 'https://municipality-garbage-tracking.onrender.com', // Replace with your actual frontend URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+}));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://municipality-garbage-tracking.onrender.com');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
 
 const port = process.env.PORT || 5500;
 
