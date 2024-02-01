@@ -48,7 +48,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://municipality-garbage-tracking.onrender.com",
-      "https://garbagevehicletracker.github.io/dummy-vehicle",
+      "https://garbagevehicletracker.github.io",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
