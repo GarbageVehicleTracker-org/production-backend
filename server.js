@@ -18,32 +18,14 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:5173", "https://municipality-garbage-tracking.onrender.com"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
-// Use helmet for security headers
-app.use(helmet());
-
-// Configure CORS
-app.use(
-  cors({
-    origin: "https://municipality-garbage-tracking.onrender.com",
-  })
-);
-
-app.use(cors({
-  origin: 'https://municipality-garbage-tracking.onrender.com', // Replace with your actual frontend URL
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-}));
-
-
-const port = process.env.PORT || 5500;
-
-connectToMongoDB();
-
-// Body parser middleware
-app.use(express.json());
 
 // WebSocket connection handling
 io.on("connection", (socket) => {
@@ -54,6 +36,32 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
+
+
+// Use helmet for security headers
+app.use(helmet());
+
+// Configure CORS
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://municipality-garbage-tracking.onrender.com"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
+);
+
+// ...
+
+
+const port = process.env.PORT || 5500;
+
+connectToMongoDB();
+
+// Body parser middleware
+app.use(express.json());
+
+
 
 // Use your routes
 app.get("/", (req, res) => {
