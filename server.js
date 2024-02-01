@@ -20,12 +20,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://municipality-garbage-tracking.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://municipality-garbage-tracking.onrender.com",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
-
 
 // WebSocket connection handling
 io.on("connection", (socket) => {
@@ -37,14 +39,17 @@ io.on("connection", (socket) => {
   });
 });
 
-
 // Use helmet for security headers
 app.use(helmet());
 
 // Configure CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://municipality-garbage-tracking.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://municipality-garbage-tracking.onrender.com",
+      "https://garbagevehicletracker.github.io/dummy-vehicle",
+    ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     optionsSuccessStatus: 204,
@@ -53,15 +58,12 @@ app.use(
 
 // ...
 
-
 const port = process.env.PORT || 5500;
 
 connectToMongoDB();
 
 // Body parser middleware
 app.use(express.json());
-
-
 
 // Use your routes
 app.get("/", (req, res) => {
