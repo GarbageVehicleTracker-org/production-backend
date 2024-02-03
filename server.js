@@ -6,6 +6,7 @@ import helmet from "helmet"; // Added helmet for security headers
 import http from "http";
 import { Server } from "socket.io";
 import connectToMongoDB from "./configs/MongoDB.config.js";
+import coordinatesController from "./controllers/Coordinates.controllers.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminRoutes from "./routes/Admins.routes.js";
 import areaRoutes from "./routes/Areas.routes.js";
