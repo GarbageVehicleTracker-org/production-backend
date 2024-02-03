@@ -40,7 +40,9 @@ class VehicleController {
     } catch (error) {
       if (error instanceof mongoose.Error.ValidationError) {
         // Handle validation errors
-        const validationErrors = Object.values(error.errors).map((err) => err.message);
+        const validationErrors = Object.values(error.errors).map(
+          (err) => err.message
+        );
         return res.status(400).json({ error: validationErrors });
       }
 
@@ -109,6 +111,25 @@ class VehicleController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error.message }); // More specific error message
+    }
+  }
+
+  async deleteVehicle(req, res) {
+    const { vehicleId } = req.params;
+
+    try {
+      const vehicle = await Vehicle.findOne({ vehicleId });
+
+      if (!vehicle) {
+        return res.status(404).json({ error: "Vehicle not found" });
+      }
+
+      await vehicle.remove();
+
+      res.status(200).json({ message: "Vehicle deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message }); 
     }
   }
 }

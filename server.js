@@ -1,3 +1,4 @@
+// /backend/server.js
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -12,6 +13,7 @@ import assignRoutes from "./routes/Assigns.routes.js";
 import coordinatesRoutes from "./routes/Coordinates.routes.js";
 import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
+import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
 
 dotenv.config();
@@ -30,16 +32,18 @@ const io = new Server(server, {
   },
 });
 
-// WebSocket connection handling
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  // You can add more WebSocket event handling here
+  socket.on("coordinatesUpdated", (data) => {
+    console.log("Received coordinates:", data);
+    coordinatesController.updateCoordinates(data); // Call the controller function to handle the coordinates
+  });
+
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
 });
-
 // Use helmet for security headers
 app.use(helmet());
 
@@ -76,6 +80,7 @@ app.use("/dustbins", authMiddleware, dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 app.use("/work", authMiddleware, assignRoutes);
 app.use("/coordinates", coordinatesRoutes);
 

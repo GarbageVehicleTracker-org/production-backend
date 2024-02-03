@@ -1,5 +1,5 @@
-import bcrypt from "bcrypt";
-import User from "../models/User.model.js";
+import bcrypt from "bcryptjs";
+import User from "../models/Users.models.js";
 
 class UserController {
   async registerUser(req, res) {
@@ -106,6 +106,51 @@ class UserController {
       const token = user.generateAuthToken();
 
       res.status(200).json({ message: "Google Sign-In successful", token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async logoutUser(req, res) {
+    try {
+      req.user.token = "";
+      await req.user.save();
+
+      res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async updateUserProfile(req, res) {
+    try {
+      const { name, email, phoneNumber, address } = req.body;
+
+      const user = req.user;
+
+      if (name) {
+        user.name = name;
+      }
+
+      if (email) {
+        user.email = email;
+      }
+
+      if (phoneNumber) {
+        user.phoneNumber = phoneNumber;
+      }
+
+      if (address) {
+        user.address = address;
+      }
+
+      user.sanitizeUserInput();
+
+      const savedUser = await user.save();
+
+      res.status(200).json({ user: savedUser });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal server error" });
