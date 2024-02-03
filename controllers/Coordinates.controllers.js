@@ -1,20 +1,45 @@
 // /backend/controllers/Coordinates.controllers.js
+// import { io } from "../server.js";
+
+// class CoordinatesController {
+//   updateCoordinates({ latitude, longitude }) {
+//     try {
+//       if (!latitude || !longitude) {
+//         console.error("Latitude and longitude are required");
+//         return;
+//       }
+
+//       // Assuming you want to broadcast the coordinates to all connected clients
+//       io.emit("coordinatesUpdated", { latitude, longitude });
+
+//       console.log("Coordinates updated successfully");
+//     } catch (error) {
+//       console.error("Internal server error:", error);
+//     }
+//   }
+// }
+
+// export default new CoordinatesController();
+
+// /backend/controllers/Coordinates.controllers.js
 import { io } from "../server.js";
 
 class CoordinatesController {
-  updateCoordinates({ latitude, longitude }) {
+  updateCoordinates(req, res) {
     try {
-      if (!latitude || !longitude) {
-        console.error("Latitude and longitude are required");
-        return;
+      const { vehicleId, latitude, longitude } = req.body;
+
+      if (!vehicleId || !latitude || !longitude) {
+        return res.status(400).json({ error: "vehicleId, latitude, and longitude are required" });
       }
 
-      // Assuming you want to broadcast the coordinates to all connected clients
-      io.emit("coordinatesUpdated", { latitude, longitude });
+      // Broadcast the coordinates to all connected clients
+      io.emit("coordinatesUpdated", { vehicleId, latitude, longitude });
 
-      console.log("Coordinates updated successfully");
+      return res.status(200).json({ message: "Coordinates updated successfully" });
     } catch (error) {
-      console.error("Internal server error:", error);
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 }
