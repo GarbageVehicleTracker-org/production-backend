@@ -73,7 +73,7 @@ app.use(express.json());
 
 // Use your routes
 app.get("/", (req, res) => {
-  res.send("My server is listening");
+  res.send("My server is listening from ec2");
 });
 
 app.use("/areas", authMiddleware, areaRoutes);
