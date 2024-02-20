@@ -73,7 +73,7 @@ app.use(express.json());
 
 // Use your routes
 app.get("/", (req, res) => {
-  res.send("My server is listening from ec2, and it is successfully deployed");
+  res.send("My server is listening from ec2 in port 5500, and it is successfully deployed");
 });
 
 app.use("/areas", authMiddleware, areaRoutes);
