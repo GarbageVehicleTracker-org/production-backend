@@ -6,15 +6,21 @@ import assignMiddleware from "../middlewares/assign.middleware.js";
 const assignRoutes = express.Router();
 
 assignRoutes.post(
-    "/create-assign",
-    assignMiddleware,
-    AssignController.createAssign
-    );
+  "/create-assign",
+  assignMiddleware,
+  AssignController.createAssign
+);
 
 assignRoutes.get(
-    "/get-all-assigns/:areaId?",
-    assignMiddleware,
-    AssignController.getAssigns
-    );
+  "/get-all-assigns/:areaId?",
+  assignMiddleware,
+  AssignController.getAssigns
+);
+
+assignRoutes.post(
+  "/delete-assign/:assignId?",
+  assignMiddleware,
+  AssignController.deleteAssign
+);
 
 export default assignRoutes;
