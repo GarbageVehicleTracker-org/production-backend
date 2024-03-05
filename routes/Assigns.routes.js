@@ -11,13 +11,13 @@ assignRoutes.post(
   AssignController.createAssign
 );
 
-assignRoutes.post(
+assignRoutes.get(
   "/get-all-assigns/:areaId?",
   assignMiddleware,
   AssignController.getAssigns
 );
 
-assignRoutes.post(
+assignRoutes.delete(
   "/delete-assign/:assignId?",
   assignMiddleware,
   AssignController.deleteAssign
