@@ -11,7 +11,7 @@ assignRoutes.post(
   AssignController.createAssign
 );
 
-assignRoutes.get(
+assignRoutes.post(
   "/get-all-assigns/:areaId?",
   assignMiddleware,
   AssignController.getAssigns
