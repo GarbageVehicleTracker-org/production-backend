@@ -63,24 +63,26 @@ class AssignController {
     const { assignId } = req.params;
 
     try {
-      const assign = await Assign.findOne({ _id: assignId });
+        const assign = await Assign.findOne({ _id: assignId });
 
-      if (!assign) {
-        return res.status(404).json({ error: "Assign not found" });
-      }
+        if (!assign) {
+            return res.status(404).json({ error: "Assign not found" });
+        }
 
-      // Set isAvailable to true for the assigned driver and vehicle
-      await Driver.findByIdAndUpdate(assign.driverId, { isAvailable: true });
-      await Vehicle.findByIdAndUpdate(assign.vehicleId, { isAvailable: true });
+        // Set isAvailable to true for the assigned driver and vehicle
+        await Driver.findByIdAndUpdate(assign.driverId, { isAvailable: true });
+        await Vehicle.findByIdAndUpdate(assign.vehicleId, { isAvailable: true });
 
-      await assign.delete();
+        // Delete the assignment document
+        await Assign.deleteOne({ _id: assignId });
 
-      res.status(200).json({ message: "Assign deleted successfully" });
+        res.status(200).json({ message: "Assign deleted successfully" });
     } catch (error) {
-      console.error("Error deleting assign:", error);
-      res.status(500).json({ error: "Internal server error" });
+        console.error("Error deleting assign:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
-  }
+}
+
 
   async getAssigns(req, res) {
     const { areaId } = req.params;
