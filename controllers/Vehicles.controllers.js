@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 import Vehicle from "../models/Vehicles.models.js";
 
 const validateVehicle = (req) => {
-  const { vehicleId, capacity, type, registrationNo } = req.body;
+  const { capacity, type, registrationNo } = req.body;
 
   // Add validation rules as needed
-  if (!vehicleId || !capacity || !type || !registrationNo) {
+  if (!capacity || !type || !registrationNo) {
     return { error: "Please provide all required fields" };
   }
 
@@ -23,12 +23,9 @@ class VehicleController {
         return res.status(400).json({ error: validationError.error });
       }
 
-      const { vehicleId, capacity, type, registrationNo } = req.body;
+      const { capacity, type, registrationNo } = req.body;
 
-      // Generate a unique ID
       const newVehicle = new Vehicle({
-        // _id: new mongoose.Types.ObjectId(),
-        vehicleId,
         capacity,
         type,
         registrationNo,
@@ -56,7 +53,7 @@ class VehicleController {
 
     try {
       if (vehicleId) {
-        const vehicle = await Vehicle.findOne({ vehicleId });
+        const vehicle = await Vehicle.findById(vehicleId);
 
         if (!vehicle) {
           return res.status(404).json({ error: "Vehicle not found" });
@@ -82,7 +79,7 @@ class VehicleController {
     }
 
     try {
-      const vehicle = await Vehicle.findOne({ vehicleId });
+      const vehicle = await Vehicle.findById(vehicleId);
 
       if (!vehicle) {
         return res.status(404).json({ error: "Vehicle not found" });
@@ -118,7 +115,7 @@ class VehicleController {
     const { vehicleId } = req.params;
 
     try {
-      const vehicle = await Vehicle.findOne({ vehicleId });
+      const vehicle = await Vehicle.findById(vehicleId);
 
       if (!vehicle) {
         return res.status(404).json({ error: "Vehicle not found" });

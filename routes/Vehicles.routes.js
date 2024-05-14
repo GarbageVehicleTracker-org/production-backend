@@ -14,12 +14,12 @@ vehicleRoutes.get(
   VehicleController.getVehicles
 );
 vehicleRoutes.get(
-  "/get-vehicles/:id?",
+  "/get-vehicles/:vehicleId?",
   vehicleMiddleware,
   VehicleController.getVehicles
 );
 vehicleRoutes.put(
-  "/update-vehicle/:id?",
+  "/update-vehicle/:vehicleId?",
   vehicleMiddleware,
   VehicleController.updateVehicle
 );
