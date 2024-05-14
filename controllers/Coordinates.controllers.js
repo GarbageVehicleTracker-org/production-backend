@@ -3,7 +3,6 @@ import { io } from "../server.js";
 
 class CoordinatesController {
   updateCoordinates({ latitude, longitude }) {
-    const { latitude, longitude } = req.body;
     try {
       if (!latitude || !longitude) {
         console.error("Latitude and longitude are required");
