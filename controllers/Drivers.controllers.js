@@ -1,4 +1,6 @@
-import Driver from "../models/Drivers.models.js"
+// driver.controllers.js
+import Driver from "../models/Drivers.models.js";
+
 const validateDriver = (req) => {
   // Implement validation logic for id, name, and phoneNumbers
   // using mongoose validators or another library
@@ -47,7 +49,7 @@ class DriverController {
 
     try {
       if (driverId) {
-        const driver = await Driver.findOne({ driverId });
+        const driver = await Driver.findById(driverId);
 
         if (!driver) {
           return res.status(404).json({ error: "Driver not found" });
@@ -73,7 +75,7 @@ class DriverController {
     }
 
     try {
-      const driver = await Driver.findOne({ driverId });
+      const driver = await Driver.findById(driverId);
 
       if (!driver) {
         return res.status(404).json({ error: "Driver not found" });
@@ -114,7 +116,7 @@ class DriverController {
     const { driverId } = req.params;
   
     try {
-      const result = await Driver.deleteOne({ driverId });
+      const result = await Driver.deleteOne({ _id: driverId });
   
       if (result.deletedCount === 0) {
         return res.status(404).json({ error: 'Driver not found' });
@@ -126,7 +128,6 @@ class DriverController {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
-  
 }
 
 export default new DriverController();

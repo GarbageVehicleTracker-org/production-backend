@@ -1,6 +1,7 @@
 // areas.controllers.js
 import Area from "../models/Areas.models.js";
 import Dustbin from "../models/Dustbins.models.js";
+
 class AreaController {
   async createArea(req, res) {
     try {
@@ -34,23 +35,17 @@ class AreaController {
     const { areaId } = req.params;
 
     try {
-      // Find the area with the specified areaId
-      const area = await Area.findOne({ areaId });
+      const area = await Area.findById(areaId).populate({
+        path: "dustbins",
+        model: Dustbin,
+        select: "-__v", 
+      }).lean();
 
       if (!area) {
         return res.status(404).json({ error: "Area not found" });
       }
 
-      // Populate the 'dustbins' field to get details of all associated dustbins
-      const populatedArea = await Area.findOne({ areaId })
-        .populate({
-          path: "dustbins",
-          model: Dustbin,
-          select: "-__v", 
-        })
-        .lean();
-
-      res.status(200).json(populatedArea);
+      res.status(200).json(area);
     } catch (error) {
       console.error("Error getting area details:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -62,20 +57,18 @@ class AreaController {
     const { name } = req.body;
 
     try {
-      const area = await Area.findOne({ areaId });
+      const area = await Area.findByIdAndUpdate(areaId, { name }, { new: true });
 
       if (!area) {
         return res.status(404).json({ error: "Area not found" });
       }
 
-      area.name = name;
-      const updatedArea = await area.save();
-
-      res.status(200).json(updatedArea);
+      res.status(200).json(area);
     } catch (error) {
       console.error("Error updating area details:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
 }
+
 export default new AreaController();
