@@ -79,12 +79,6 @@ connectToMongoDB();
 // Body parser middleware
 app.use(express.json());
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 
 // Use your routes
