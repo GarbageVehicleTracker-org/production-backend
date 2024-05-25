@@ -24,6 +24,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [
+      "*",
       "http://localhost:5173",
       "https://garbagevehicletracker.github.io",
       "https://municipality-garbage-tracking.onrender.com",
@@ -31,7 +32,7 @@ const io = new Server(server, {
       "https://dummy-vehicle.onrender.com",
       "https://frontend-teal-eta-10.vercel.app",
       "https://frontend-git-main-linuxs-projects.vercel.app",
-      "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app"
+      "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -57,6 +58,7 @@ app.use(helmet());
 app.use(
   cors({
     origin: [
+      "*",
       "http://localhost:5173",
       "https://municipality-garbage-tracking.onrender.com",
       "https://garbagevehicletracker.github.io",
@@ -64,7 +66,7 @@ app.use(
       "https://dummy-vehicle.onrender.com",
       "https://frontend-teal-eta-10.vercel.app",
       "https://frontend-git-main-linuxs-projects.vercel.app",
-      "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app"
+      "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
@@ -78,8 +80,6 @@ connectToMongoDB();
 
 // Body parser middleware
 app.use(express.json());
-
-
 
 // Use your routes
 app.get("/", (req, res) => {
