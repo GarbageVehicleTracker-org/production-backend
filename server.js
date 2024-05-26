@@ -42,8 +42,9 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  socket.on("coordinatesUpdated", (data) => {
-    console.log("Received coordinates:", data);
+  socket.on("coordinatesUpdated", (latitude, longitude) => {
+    console.log("Received coordinates:", latitude, longitude);
+    const data = { latitude, longitude };
     coordinatesController.updateCoordinates(data); // Call the controller function to handle the coordinates
   });
 
