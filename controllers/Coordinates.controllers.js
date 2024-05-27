@@ -1,17 +1,16 @@
-// /backend/controllers/Coordinates.controllers.js
 import { io } from "../server.js";
 
 class CoordinatesController {
-  updateCoordinates({ latitude, longitude }) {
+  updateCoordinates({ vehicleId, latitude, longitude }) {
     try {
-      if (!latitude || !longitude) {
-        console.error("Latitude and longitude are required");
+      if (!vehicleId || !latitude || !longitude) {
+        console.error("Vehicle ID, latitude, and longitude are required");
         return;
       }
 
-      console.log(latitude, longitude);
-      // Assuming you want to broadcast the coordinates to all connected clients
-      io.emit("coordinatesUpdated", { latitude, longitude });
+      console.log(`Vehicle ${vehicleId}: ${latitude}, ${longitude}`);
+      // Broadcast the coordinates along with the vehicleId to all connected clients
+      io.emit("coordinatesUpdated", { vehicleId, latitude, longitude });
 
       console.log("Coordinates updated successfully");
     } catch (error) {

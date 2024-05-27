@@ -1,12 +1,11 @@
-// /backend/server.js
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import helmet from "helmet"; // Added helmet for security headers
+import helmet from "helmet";
 import http from "http";
 import { Server } from "socket.io";
 import connectToMongoDB from "./configs/MongoDB.config.js";
-import coordinatesController from "./controllers/Coordinates.controllers.js";
+import coordinatesMatchController from "./controllers/CoordinatesMatchControllers.js"; 
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminRoutes from "./routes/Admins.routes.js";
 import areaRoutes from "./routes/Areas.routes.js";
@@ -42,16 +41,17 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  socket.on("coordinatesUpdated", (latitude, longitude) => {
-    console.log("Received coordinates:", latitude, longitude);
-    const data = { latitude, longitude };
-    coordinatesController.updateCoordinates(data); // Call the controller function to handle the coordinates
+  socket.on("coordinatesUpdated", (data) => {
+    const { vehicleId, latitude, longitude } = data;
+    console.log(`Received coordinates for vehicle ${vehicleId}:`, latitude, longitude);
+    coordinatesMatchController.updateCoordinates(data); // Call the controller function to handle the coordinates
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
 });
+
 // Use helmet for security headers
 app.use(helmet());
 
