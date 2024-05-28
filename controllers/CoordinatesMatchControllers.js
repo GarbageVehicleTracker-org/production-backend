@@ -13,17 +13,16 @@ class CoordinatesMatchController {
       // Broadcast the coordinates along with the vehicleId to all connected clients
       io.emit("coordinatesUpdated", { vehicleId, latitude, longitude });
 
-      // Fetch all coordinates from the database
-      const dustbins = await Dustbin.find();
+      // Fetch all dustbins from the database
+      const dustbins = await Dustbin.find({ isVisited: false }); // Only fetch unvisited dustbins
 
       // Match the received coordinates with the existing array of points
       const matchedDustbins = dustbins.filter(dustbin => {
         return dustbin.coordinates.some(point => {
-          // Adjust the threshold for matching coordinates if necessary
-          return (
-            Math.abs(point.latitude - latitude) < 0.0001 &&
-            Math.abs(point.longitude - longitude) < 0.0001
-          );
+          // Adjust the threshold for matching coordinates to 5 decimal places
+          const latDiff = Math.abs(point.latitude - latitude);
+          const lonDiff = Math.abs(point.longitude - longitude);
+          return latDiff < 0.00001 && lonDiff < 0.00001;
         });
       });
 
