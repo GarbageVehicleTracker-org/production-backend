@@ -32,7 +32,7 @@ class CoordinatesMatchController {
           matchedDustbin.isVisited = true;
           matchedDustbin.visitedTimestamp = new Date();
           await matchedDustbin.save();
-
+          console.log("Dustbin matched and updated:", matchedDustbin._id)
           // Emit the update status to all connected clients
           io.emit("dustbinVisited", { id: matchedDustbin._id, isVisited: true });
         })
