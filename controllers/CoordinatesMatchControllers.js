@@ -22,7 +22,7 @@ class CoordinatesMatchController {
           // Adjust the threshold for matching coordinates to 5 decimal places
           const latDiff = Math.abs(point.latitude - latitude);
           const lonDiff = Math.abs(point.longitude - longitude);
-          return latDiff < 0.00001 && lonDiff < 0.00001;
+          return latDiff < 0.0001 && lonDiff < 0.0001;
         });
       });
 
