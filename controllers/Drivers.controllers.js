@@ -169,10 +169,11 @@ class DriverController {
         token,
         driverId: driver.driverId,
         name: driver.name,
+        assignId : assignData?._id, // Use optional chaining
         vehicleId: assignData?.vehicleId, // Use optional chaining
         areaId: assignData?.areaId, // Use optional chaining
         driverImage: driver.image,
-        
+
       });
     } catch (error) {
       console.error("Error logging in driver:", error);
