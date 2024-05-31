@@ -33,6 +33,7 @@ const io = new Server(server, {
       "https://frontend-teal-eta-10.vercel.app",
       "https://frontend-git-main-linuxs-projects.vercel.app",
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
+      "https://send-driver-1.onrender.com"
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -69,6 +70,7 @@ app.use(
       "https://frontend-teal-eta-10.vercel.app",
       "https://frontend-git-main-linuxs-projects.vercel.app",
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
+      "https://send-driver-1.onrender.com"
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,

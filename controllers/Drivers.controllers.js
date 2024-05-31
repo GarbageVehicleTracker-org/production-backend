@@ -137,7 +137,8 @@ class DriverController {
 
   async loginDriver(req, res) {
     const { driverId, password } = req.body;
-  
+    console.log("driverId",driverId)
+    console.log("password",password)
     try {
       const driver = await Driver.findOne({ driverId });
       const driver_id = driver._id;
@@ -169,7 +170,7 @@ class DriverController {
         token,
         driverId: driver_id,
         name: driver.name,
-        assignId : assignData?._id, // Use optional chaining
+        assignId : assignData?.id, // Use optional chaining
         vehicleId: assignData?.vehicleId, // Use optional chaining
         areaId: assignData?.areaId, // Use optional chaining
         driverImage: driver.image,
