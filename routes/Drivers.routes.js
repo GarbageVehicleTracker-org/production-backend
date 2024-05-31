@@ -27,4 +27,6 @@ driverRoutes.get(
   driverMiddleware,
   DriverController.deleteDriver
 );
+
+driverRoutes.post("/login", driverMiddleware, DriverController.loginDriver);
 export default driverRoutes;

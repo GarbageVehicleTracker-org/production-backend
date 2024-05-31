@@ -15,6 +15,7 @@ import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
 import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
+import driverLoginRoutes from './routes/driverLoginRoutes.js'
 
 dotenv.config();
 
@@ -91,6 +92,7 @@ app.use("/areas", authMiddleware, areaRoutes);
 app.use("/dustbins", authMiddleware, dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
+app.use("/driver-login",driverLoginRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/work", authMiddleware, assignRoutes);

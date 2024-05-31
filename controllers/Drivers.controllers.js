@@ -1,4 +1,6 @@
 // driver.controllers.js
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import Driver from "../models/Drivers.models.js";
 
 const validateDriver = (req) => {
@@ -20,10 +22,12 @@ class DriverController {
     const existingDriver = await Driver.findOne({ driverId });
 
     if (existingDriver) {
-      return res
-        .status(400)
-        .json({ error: "Driver with this ID already exists." });
+      return res.status(400).json({ error: "Driver with this ID already exists." });
     }
+    const formattedName = name.replace(/\s+/g, '');
+
+    // Generate a simple password (e.g., "Driver@1234")
+    const password = `${formattedName}@${phoneNumbers.substring(phoneNumbers.length - 4)}`;
 
     // Create a new driver
     const newDriver = new Driver({
@@ -33,6 +37,7 @@ class DriverController {
       age,
       gender,
       image,
+      password,
     });
 
     // Save the driver to the database
@@ -114,18 +119,50 @@ class DriverController {
 
   async deleteDriver(req, res) {
     const { driverId } = req.params;
-  
+
     try {
       const result = await Driver.deleteOne({ _id: driverId });
-  
+
       if (result.deletedCount === 0) {
         return res.status(404).json({ error: 'Driver not found' });
       }
-  
+
       res.status(200).json({ message: 'Driver deleted successfully' });
     } catch (error) {
       console.error('Error deleting driver:', error);
       res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  async loginDriver(req, res) {
+    const { driverId, password } = req.body;
+
+    try {
+      const driver = await Driver.findOne({ driverId });
+
+      if (!driver) {
+        return res.status(404).json({ error: "Driver not found" });
+      }
+
+      const isMatch = await bcrypt.compare(password, driver.password);
+
+      if (!isMatch) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      const token = jwt.sign({ driverId: driver.driverId }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+    
+      res.status(200).json({
+        message: "Login successful",
+        token,
+        driverId: driver.driverId,
+        name: driver.name
+      });
+    } catch (error) {
+      console.error("Error logging in driver:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 }

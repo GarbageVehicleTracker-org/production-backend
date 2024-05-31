@@ -1,6 +1,7 @@
 // Drivers.models.js
 
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 // Define the driver schema
 const driverSchema = new mongoose.Schema(
@@ -31,12 +32,22 @@ const driverSchema = new mongoose.Schema(
     },
     isAvailable: {
       type: Boolean,
-      // required: true,
       default: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
 );
+
+driverSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
 const Driver = mongoose.model("Driver", driverSchema);
 
