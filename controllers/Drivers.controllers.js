@@ -167,7 +167,7 @@ class DriverController {
       res.status(200).json({
         message: "Login successful",
         token,
-        driverId: driver.driverId,
+        driverId: driver_id,
         name: driver.name,
         assignId : assignData?._id, // Use optional chaining
         vehicleId: assignData?.vehicleId, // Use optional chaining
