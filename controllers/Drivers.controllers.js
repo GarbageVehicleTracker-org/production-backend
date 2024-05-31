@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import Driver from "../models/Drivers.models.js";
+import Assign from "../models/Assigns.model.js";
 
 const validateDriver = (req) => {
   // Implement validation logic for id, name, and phoneNumbers
@@ -136,35 +137,49 @@ class DriverController {
 
   async loginDriver(req, res) {
     const { driverId, password } = req.body;
-
+  
     try {
       const driver = await Driver.findOne({ driverId });
-
+      const driver_id = driver._id;
+  
       if (!driver) {
         return res.status(404).json({ error: "Driver not found" });
       }
-
+  
       const isMatch = await bcrypt.compare(password, driver.password);
-
+  
       if (!isMatch) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
-
+  
       const token = jwt.sign({ driverId: driver.driverId }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-    
+  
+      // Check if assignData exists before accessing properties
+      let assignData = null;
+      try {
+        assignData = await Assign.findOne({ driverId: driver_id });
+      } catch (error) {
+        console.error("Error fetching assigned data:", error);
+      }
+  
       res.status(200).json({
         message: "Login successful",
         token,
         driverId: driver.driverId,
-        name: driver.name
+        name: driver.name,
+        vehicleId: assignData?.vehicleId, // Use optional chaining
+        areaId: assignData?.areaId, // Use optional chaining
+        driverImage: driver.image,
+        
       });
     } catch (error) {
       console.error("Error logging in driver:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
+  
 }
 
 export default new DriverController();
