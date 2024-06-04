@@ -14,7 +14,7 @@ import coordinatesRoutes from "./routes/Coordinates.routes.js";
 import driverLoginRoutes from "./routes/DriverLogin.routes.js";
 import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
-import NotificationRouter from "./routes/Notification.routes.js";
+import NotificationRoutes from "./routes/Notification.routes.js";
 import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
 
@@ -106,7 +106,7 @@ app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/work", authMiddleware, assignRoutes);
 app.use("/coordinates", coordinatesRoutes);
-app.use("/updates", NotificationRouter);
+app.use("/updates", NotificationRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
