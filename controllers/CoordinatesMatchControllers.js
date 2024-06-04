@@ -1,63 +1,62 @@
 import Dustbin from "../models/Dustbins.models.js";
-import Notification from "../models/Notification.models.js"; // Ensure the correct path to your Notification model
+import Notification from "../models/Notification.models.js";
 import { io } from "../server.js";
 
 class CoordinatesMatchController {
   async updateCoordinates({ vehicleId, latitude, longitude }) {
     try {
+      // Input Validation (Essential)
       if (!vehicleId || !latitude || !longitude) {
-        console.error("Vehicle ID, latitude, and longitude are required");
-        return;
+        console.error("Missing required parameters: vehicleId, latitude, or longitude");
+        return; 
       }
 
-      console.log(`Vehicle ${vehicleId}: ${latitude}, ${longitude}`);
-      // Broadcast the coordinates along with the vehicleId to all connected clients
+      // Broadcast Coordinates (Optional)
       io.emit("coordinatesUpdated", { vehicleId, latitude, longitude });
 
-      // Fetch all dustbins from the database
-      const dustbins = await Dustbin.find({ isVisited: false }); // Only fetch unvisited dustbins
+      // Fetch Unvisited Dustbins (Efficiency)
+      const dustbins = await Dustbin.find({ isVisited: false });
 
-      // Match the received coordinates with the existing array of points
+      // Match Coordinates (Accuracy)
       const matchedDustbins = dustbins.filter((dustbin) => {
         return dustbin.coordinates.some((point) => {
-          // Adjust the threshold for matching coordinates to 5 decimal places
           const latDiff = Math.abs(point.latitude - latitude);
           const lonDiff = Math.abs(point.longitude - longitude);
-          return latDiff < 0.00001 && lonDiff < 0.00001;
+          return latDiff < 0.00001 && lonDiff < 0.00001; // Adjust threshold if needed
         });
       });
 
-      // Update isVisited and visitedTimestamp for matched dustbins
+      // Update and Notify (Atomicity)
       await Promise.all(
-        matchedDustbins.map(async (matchedDustbin) => {
-          matchedDustbin.isVisited = true;
-          matchedDustbin.visitedTimestamp = new Date();
-          await matchedDustbin.save();
-          console.log("Dustbin matched and updated:", matchedDustbin._id);
+        matchedDustbins.map(async (dustbin) => {
+          try {
+            // Update Dustbin
+            dustbin.isVisited = true;
+            dustbin.visitedTimestamp = new Date();
+            await dustbin.save();
 
-          // Emit the update status to all connected clients
-          io.emit("dustbinVisited", {
-            id: matchedDustbin._id,
-            isVisited: true,
-          });
+            // Emit Dustbin Update (Optional)
+            io.emit("dustbinVisited", { id: dustbin._id, isVisited: true });
 
-          // Create a notification for each matched dustbin
-          const newNotification = new Notification({
-            driverId: vehicleId,
-            title: "Dustbin Visited",
-            message: `Dustbin with ID ${matchedDustbin._id} has been visited by ${vehicleId}.`,
-            isRead: false,
-          });
-          await newNotification.save();
-          console.log("Notification created for dustbin:", matchedDustbin._id);
+            // Create Notification
+            const notification = new Notification({
+              driverId: vehicleId,
+              title: "Dustbin Visited",
+              message: `Dustbin with ID ${dustbin._id} visited by vehicle ${vehicleId}`,
+              isRead: false,
+            });
+            await notification.save(); // Await is crucial here
+            
+            console.log(`Notification created for dustbin ${dustbin._id}`);
+          } catch (notificationError) {
+            console.error("Notification error:", notificationError.message, notificationError);
+            // Handle the error gracefully (e.g., retry, notify admin, etc.)
+          }
         })
       );
-
-      console.log(
-        "Coordinates updated and dustbins marked as visited successfully"
-      );
     } catch (error) {
-      console.error("Internal server error:", error);
+      console.error("Internal Server Error:", error);
+      // Consider sending an error response to the client
     }
   }
 }

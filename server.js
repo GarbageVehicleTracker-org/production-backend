@@ -17,6 +17,8 @@ import dustbinRoutes from "./routes/Dustbins.routes.js";
 import NotificationRoutes from "./routes/Notification.routes.js";
 import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
+import cron from "node-cron";
+import DustbinResetController from "./controllers/DustbinResetController.js"; 
 
 dotenv.config();
 
@@ -36,6 +38,7 @@ const io = new Server(server, {
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
       "https://send-driver-1.onrender.com",
       "https://frontend-client-yyhr.onrender.com",
+      "https://user-frontend-20ms.onrender.com"
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -63,6 +66,19 @@ io.on("connection", (socket) => {
 // Use helmet for security headers
 app.use(helmet());
 
+
+
+
+cron.schedule("0 0 * * *", async () => { 
+  console.log("Running scheduled dustbin reset...");
+  try {
+    await DustbinResetController.resetAllDustbins();
+    console.log("Dustbins successfully reset.");
+  } catch (error) {
+    console.error("Error resetting dustbins:", error);
+  }
+});
+
 // Configure CORS
 app.use(
   cors({
@@ -78,6 +94,7 @@ app.use(
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
       "https://send-driver-1.onrender.com",
       "https://frontend-client-yyhr.onrender.com",
+      "https://user-frontend-20ms.onrender.com"
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
