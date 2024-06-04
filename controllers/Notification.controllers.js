@@ -1,6 +1,6 @@
 // controllers/notification.controllers.js
 
-import Notification from '../models/Notification.models.js';
+import Notification from "../models/Notification.models.js";
 
 class NotificationController {
   async createNotification(req, res) {
@@ -16,20 +16,29 @@ class NotificationController {
       const savedNotification = await newNotification.save();
       res.status(201).json(savedNotification);
     } catch (error) {
-      console.error('Error creating notification:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error("Error creating notification:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
   async getNotifications(req, res) {
     const { driverId } = req.params;
 
+    if (driverId) {
+      try {
+        const notifications = await Notification.find({ driverId });
+        res.status(200).json(notifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    }
     try {
-      const notifications = await Notification.find({ driverId });
-      res.status(200).json(notifications);
+      const notification = await Notification.find();
+      res.status(200).json(notification);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log("Error fetching notification:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
@@ -40,7 +49,7 @@ class NotificationController {
       const notification = await Notification.findById(notificationId);
 
       if (!notification) {
-        return res.status(404).json({ error: 'Notification not found' });
+        return res.status(404).json({ error: "Notification not found" });
       }
 
       notification.isRead = true;
@@ -48,8 +57,8 @@ class NotificationController {
 
       res.status(200).json(updatedNotification);
     } catch (error) {
-      console.error('Error updating notification:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error("Error updating notification:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 }
