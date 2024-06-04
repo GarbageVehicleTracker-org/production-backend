@@ -1,8 +1,9 @@
 // driver.controllers.js
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import Driver from "../models/Drivers.models.js";
+import jwt from "jsonwebtoken";
+import Area from "../models/Areas.models.js";
 import Assign from "../models/Assigns.model.js";
+import Driver from "../models/Drivers.models.js";
 import Vehicle from "../models/Vehicles.models.js";
 
 const validateDriver = (req) => {
@@ -169,10 +170,13 @@ class DriverController {
         console.error("Error fetching assigned data:", error);
       }
       let vehicleId = null;
+      let areaId = null;
 if (assignData) {
   vehicleId = assignData.vehicleId; // Assuming vehicleId is stored directly
+  areaId = assignData.areaId;
 }
         const vehicleData = await Vehicle.findById({ _id : vehicleId}); 
+        const areaData = await Area.findById({_id : areaId})
       res.status(200).json({
         message: "Login successful",
         token,
@@ -181,6 +185,7 @@ if (assignData) {
         assignId : assignData?.id, // Use optional chaining
         vehicleId: vehicleData?.vehicleId, // Use optional chaining
         areaId: assignData?.areaId, // Use optional chaining
+        areaName: areaData?.name,
         driverImage: driver.image,
 
       });
