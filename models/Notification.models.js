@@ -4,8 +4,7 @@ import mongoose from 'mongoose';
 
 const notificationSchema = new mongoose.Schema({
   driverId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Driver',
+    type: String,
     required: true,
   },
   title: {
