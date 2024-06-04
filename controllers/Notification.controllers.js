@@ -3,45 +3,36 @@
 import Notification from "../models/Notification.models.js";
 
 class NotificationController {
+  // Create a new notification
   async createNotification(req, res) {
     const { driverId, title, message } = req.body;
 
     try {
-      const newNotification = new Notification({
-        driverId,
-        title,
-        message,
-      });
-
+      const newNotification = new Notification({ driverId, title, message });
       const savedNotification = await newNotification.save();
-      res.status(201).json(savedNotification);
+      return res.status(201).json(savedNotification);
     } catch (error) {
       console.error("Error creating notification:", error);
-      res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
+  // Get notifications for a specific driver or all notifications if no driverId is provided
   async getNotifications(req, res) {
     const { driverId } = req.params;
 
-    if (driverId) {
-      try {
-        const notifications = await Notification.find({ driverId });
-        res.status(200).json(notifications);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-        res.status(500).json({ error: "Internal server error" });
-      }
-    }
     try {
-      const notification = await Notification.find();
-      res.status(200).json(notification);
+      const notifications = driverId
+        ? await Notification.find({ driverId })
+        : await Notification.find();
+      return res.status(200).json(notifications);
     } catch (error) {
-      console.log("Error fetching notification:", error);
-      res.status(500).json({ error: "Internal server error" });
+      console.error("Error fetching notifications:", error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
+  // Mark a notification as read
   async markAsRead(req, res) {
     const { notificationId } = req.params;
 
@@ -54,11 +45,10 @@ class NotificationController {
 
       notification.isRead = true;
       const updatedNotification = await notification.save();
-
-      res.status(200).json(updatedNotification);
+      return res.status(200).json(updatedNotification);
     } catch (error) {
       console.error("Error updating notification:", error);
-      res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 }
