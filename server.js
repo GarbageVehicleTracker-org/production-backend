@@ -5,17 +5,18 @@ import helmet from "helmet";
 import http from "http";
 import { Server } from "socket.io";
 import connectToMongoDB from "./configs/MongoDB.config.js";
-import coordinatesMatchController from "./controllers/CoordinatesMatchControllers.js"; 
+import coordinatesMatchController from "./controllers/CoordinatesMatchControllers.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminRoutes from "./routes/Admins.routes.js";
 import areaRoutes from "./routes/Areas.routes.js";
 import assignRoutes from "./routes/Assigns.routes.js";
 import coordinatesRoutes from "./routes/Coordinates.routes.js";
+import driverLoginRoutes from "./routes/DriverLogin.routes.js";
 import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
+import NotificationRouter from "./routes/Notification.routes.js";
 import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
-import driverLoginRoutes from './routes/DriverLogin.routes.js'
 
 dotenv.config();
 
@@ -33,7 +34,8 @@ const io = new Server(server, {
       "https://frontend-teal-eta-10.vercel.app",
       "https://frontend-git-main-linuxs-projects.vercel.app",
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
-      "https://send-driver-1.onrender.com"
+      "https://send-driver-1.onrender.com",
+      "https://frontend-client-yyhr.onrender.com/",
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -45,7 +47,11 @@ io.on("connection", (socket) => {
 
   socket.on("coordinatesUpdated", (data) => {
     const { vehicleId, latitude, longitude } = data;
-    console.log(`Received coordinates for vehicle ${vehicleId}:`, latitude, longitude);
+    console.log(
+      `Received coordinates for vehicle ${vehicleId}:`,
+      latitude,
+      longitude
+    );
     coordinatesMatchController.updateCoordinates(data); // Call the controller function to handle the coordinates
   });
 
@@ -70,7 +76,8 @@ app.use(
       "https://frontend-teal-eta-10.vercel.app",
       "https://frontend-git-main-linuxs-projects.vercel.app",
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
-      "https://send-driver-1.onrender.com"
+      "https://send-driver-1.onrender.com",
+      "https://frontend-client-yyhr.onrender.com/",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
@@ -94,11 +101,12 @@ app.use("/areas", authMiddleware, areaRoutes);
 app.use("/dustbins", authMiddleware, dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
-app.use("/driver-login",driverLoginRoutes);
+app.use("/driver-login", driverLoginRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/work", authMiddleware, assignRoutes);
 app.use("/coordinates", coordinatesRoutes);
+app.use("/updates", NotificationRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

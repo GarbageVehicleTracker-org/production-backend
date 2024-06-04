@@ -34,7 +34,7 @@ class CoordinatesMatchController {
           matchedDustbin.visitedTimestamp = new Date();
           await matchedDustbin.save();
           console.log("Dustbin matched and updated:", matchedDustbin._id);
-          
+
           // Emit the update status to all connected clients
           io.emit("dustbinVisited", {
             id: matchedDustbin._id,
@@ -45,7 +45,8 @@ class CoordinatesMatchController {
           const newNotification = new Notification({
             driverId: vehicleId,
             title: "Dustbin Visited",
-            message: `Dustbin with ID ${matchedDustbin._id} has been visited.`,
+            message: `Dustbin with ID ${matchedDustbin._id} has been visited by ${vehicleId}.`,
+            isRead: false,
           });
           await newNotification.save();
           console.log("Notification created for dustbin:", matchedDustbin._id);
