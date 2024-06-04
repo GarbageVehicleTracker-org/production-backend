@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import Driver from "../models/Drivers.models.js";
 import Assign from "../models/Assigns.model.js";
+import Vehicle from "../models/Vehicles.models.js";
 
 const validateDriver = (req) => {
   // Implement validation logic for id, name, and phoneNumbers
@@ -142,6 +143,8 @@ class DriverController {
     try {
       const driver = await Driver.findOne({ driverId });
       const driver_id = driver._id;
+
+   
   
       if (!driver) {
         return res.status(404).json({ error: "Driver not found" });
@@ -161,17 +164,22 @@ class DriverController {
       let assignData = null;
       try {
         assignData = await Assign.findOne({ driverId: driver_id });
+     
       } catch (error) {
         console.error("Error fetching assigned data:", error);
       }
-  
+      let vehicleId = null;
+if (assignData) {
+  vehicleId = assignData.vehicleId; // Assuming vehicleId is stored directly
+}
+        const vehicleData = await Vehicle.findById({ _id : vehicleId}); 
       res.status(200).json({
         message: "Login successful",
         token,
         driverId: driver_id,
         name: driver.name,
         assignId : assignData?.id, // Use optional chaining
-        vehicleId: assignData?.vehicleId, // Use optional chaining
+        vehicleId: vehicleData?.vehicleId, // Use optional chaining
         areaId: assignData?.areaId, // Use optional chaining
         driverImage: driver.image,
 

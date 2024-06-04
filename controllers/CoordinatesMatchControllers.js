@@ -1,5 +1,5 @@
-import { io } from "../server.js";
 import Dustbin from "../models/Dustbins.models.js"; // Ensure the correct path to your Dustbins model
+import { io } from "../server.js";
 
 class CoordinatesMatchController {
   async updateCoordinates({ vehicleId, latitude, longitude }) {
@@ -17,8 +17,8 @@ class CoordinatesMatchController {
       const dustbins = await Dustbin.find({ isVisited: false }); // Only fetch unvisited dustbins
 
       // Match the received coordinates with the existing array of points
-      const matchedDustbins = dustbins.filter(dustbin => {
-        return dustbin.coordinates.some(point => {
+      const matchedDustbins = dustbins.filter((dustbin) => {
+        return dustbin.coordinates.some((point) => {
           // Adjust the threshold for matching coordinates to 5 decimal places
           const latDiff = Math.abs(point.latitude - latitude);
           const lonDiff = Math.abs(point.longitude - longitude);
@@ -32,13 +32,18 @@ class CoordinatesMatchController {
           matchedDustbin.isVisited = true;
           matchedDustbin.visitedTimestamp = new Date();
           await matchedDustbin.save();
-          console.log("Dustbin matched and updated:", matchedDustbin._id)
+          console.log("Dustbin matched and updated:", matchedDustbin._id);
           // Emit the update status to all connected clients
-          io.emit("dustbinVisited", { id: matchedDustbin._id, isVisited: true });
+          io.emit("dustbinVisited", {
+            id: matchedDustbin._id,
+            isVisited: true,
+          });
         })
       );
 
-      console.log("Coordinates updated and dustbins marked as visited successfully");
+      console.log(
+        "Coordinates updated and dustbins marked as visited successfully"
+      );
     } catch (error) {
       console.error("Internal server error:", error);
     }

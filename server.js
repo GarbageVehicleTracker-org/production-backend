@@ -15,7 +15,7 @@ import driverRoutes from "./routes/Drivers.routes.js";
 import dustbinRoutes from "./routes/Dustbins.routes.js";
 import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
-import driverLoginRoutes from './routes/driverLoginRoutes.js'
+import driverLoginRoutes from './routes/DriverLogin.routes.js'
 
 dotenv.config();
 
