@@ -38,7 +38,7 @@ class CoordinatesMatchController {
 
           // Emit Dustbin Update
           io.emit("dustbinVisited", { id: dustbin._id, isVisited: true });
-
+            console.log("before calling the notification ")
           // Create Notification
           const notification = new Notification({
             driverId: vehicleId,
@@ -47,7 +47,7 @@ class CoordinatesMatchController {
             isRead: false,
           });
           await notification.save();
-
+          console.log("after calling the notification ")
           console.log(`Notification created for dustbin ${dustbin._id}`);
         } catch (notificationError) {
           console.error("Notification error:", notificationError.message);

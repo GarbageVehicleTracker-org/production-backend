@@ -1,10 +1,10 @@
 import express from "express";
-import coordinatesController from "../controllers/CoordinatesMatchControllers.js";
+import CoordinatesMatchController from "../controllers/CoordinatesMatchControllers.js";
 const coordinatesRoutes = express.Router();
 
 coordinatesRoutes.post(
   "/send-coordinates",
-  coordinatesController.updateCoordinates
+  CoordinatesMatchController.updateCoordinates
 );
 
 export default coordinatesRoutes;
