@@ -38,7 +38,8 @@ const io = new Server(server, {
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
       "https://send-driver-1.onrender.com",
       "https://frontend-client-yyhr.onrender.com",
-      "https://user-frontend-20ms.onrender.com"
+      "https://user-frontend-20ms.onrender.com",
+      "https://com-buie-garbagevehicletracker-backbone.onrender.com"
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -94,7 +95,8 @@ app.use(
       "https://frontend-mmjb4ntlh-linuxs-projects.vercel.app",
       "https://send-driver-1.onrender.com",
       "https://frontend-client-yyhr.onrender.com",
-      "https://user-frontend-20ms.onrender.com"
+      "https://user-frontend-20ms.onrender.com",
+      "https://com-buie-garbagevehicletracker-backbone.onrender.com"
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
