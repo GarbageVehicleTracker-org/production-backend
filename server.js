@@ -114,7 +114,7 @@ app.get("/", (req, res) => {
   res.send("Server is running...");
 });
 
-app.use("/areas", authMiddleware, areaRoutes);
+app.use("/areas",  areaRoutes);
 app.use("/dustbins", authMiddleware, dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
