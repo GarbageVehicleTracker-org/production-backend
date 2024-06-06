@@ -2,22 +2,18 @@ import Area from "../models/Areas.models.js";
 import Dustbin from "../models/Dustbins.models.js";
 
 class DustbinController {
-  
   async createDustbin(req, res) {
     const { areaId, coordinates } = req.body;
 
     try {
-      const uniqueSuffix = Date.now().toString(); // Unique timestamp for continuous characters
-      const modifiedAreaId = `${areaId}_${uniqueSuffix}`;
-
-      const area = await Area.findOne({ areaId });
+      const area = await Area.findById({ _id: areaId });
 
       if (!area) {
         return res.status(404).json({ error: "Area not found" });
       }
 
       const dustbin = new Dustbin({
-        areaId: modifiedAreaId, // Use the modified areaId
+        areaId: areaId,
         coordinates,
         isVisited: false,
         visitedTimestamp: null,
@@ -66,9 +62,7 @@ class DustbinController {
 
     try {
       // Find all dustbins with the matching areaId prefix
-      const dustbins = await Dustbin.find({
-        areaId: { $regex: `^${areaId}` },
-      });
+      const dustbins = await Dustbin.findById({ _id: areaId });
 
       if (!dustbins || dustbins.length === 0) {
         return res.status(404).json({ error: "No matching dustbins found" });

@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 
 const dustbinSchema = new mongoose.Schema({
   areaId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Area",
     required: true,
   },
   coordinates: [

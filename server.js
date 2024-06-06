@@ -117,7 +117,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/areas",  areaRoutes);
-app.use("/dustbins", authMiddleware, dustbinRoutes);
+app.use("/dustbins",  dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
 app.use("/driver-login", driverLoginRoutes);
