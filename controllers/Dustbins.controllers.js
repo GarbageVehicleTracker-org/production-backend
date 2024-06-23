@@ -62,7 +62,7 @@ class DustbinController {
 
     try {
       // Find all dustbins with the matching areaId prefix
-      const dustbins = await Dustbin.findOne({ areaId });
+      const dustbins = await Dustbin.findOne({ areaId: areaId });
 
       if (!dustbins || dustbins.length === 0) {
         return res.status(404).json({ error: "No matching dustbins found" });
