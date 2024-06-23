@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import http from "http";
+import cron from "node-cron";
 import { Server } from "socket.io";
 import connectToMongoDB from "./configs/MongoDB.config.js";
 import coordinatesMatchController from "./controllers/CoordinatesMatchControllers.js";
+import DustbinResetController from "./controllers/DustbinResetController.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import adminRoutes from "./routes/Admins.routes.js";
 import areaRoutes from "./routes/Areas.routes.js";
@@ -17,8 +19,6 @@ import dustbinRoutes from "./routes/Dustbins.routes.js";
 import NotificationRoutes from "./routes/Notification.routes.js";
 import userRoutes from "./routes/Users.routes.js";
 import vehicleRoutes from "./routes/Vehicles.routes.js";
-import cron from "node-cron";
-import DustbinResetController from "./controllers/DustbinResetController.js"; 
 
 dotenv.config();
 
@@ -39,7 +39,7 @@ const io = new Server(server, {
       "https://send-driver-1.onrender.com",
       "https://frontend-client-yyhr.onrender.com",
       "https://user-frontend-20ms.onrender.com",
-      "https://com-buie-garbagevehicletracker-backbone.onrender.com"
+      "https://com-buie-garbagevehicletracker-backbone.onrender.com",
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -67,10 +67,32 @@ io.on("connection", (socket) => {
 // Use helmet for security headers
 app.use(helmet());
 
+// Cron job to access the URL every 30 seconds
+cron.schedule("*/30 * * * * *", async () => {
+  console.log("Accessing https://production-backend-3olq.onrender.com...");
+  try {
+    const response = await fetch(
+      "https://production-backend-3olq.onrender.com"
+    );
+    console.log("Accessed **production-backend** with status:", response.status);
+  } catch (error) {
+    console.error("Error accessing URL:", error);
+  }
+});
 
+cron.schedule("*/30 * * * * *", async () => {
+  console.log("Accessing https://garbage-tracking-backend.onrender.com...");
+  try {
+    const response = await fetch(
+      "https://garbage-tracking-backend.onrender.com"
+    );
+    console.log("Accessed **garbage-tracking-backend** with status:", response.status);
+  } catch (error) {
+    console.error("Error accessing URL:", error);
+  }
+});
 
-
-cron.schedule("0 0 * * *", async () => { 
+cron.schedule("0 0 * * *", async () => {
   console.log("Running scheduled dustbin reset...");
   try {
     await DustbinResetController.resetAllDustbins();
@@ -96,7 +118,7 @@ app.use(
       "https://send-driver-1.onrender.com",
       "https://frontend-client-yyhr.onrender.com",
       "https://user-frontend-20ms.onrender.com",
-      "https://com-buie-garbagevehicletracker-backbone.onrender.com"
+      "https://com-buie-garbagevehicletracker-backbone.onrender.com",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
@@ -116,8 +138,8 @@ app.get("/", (req, res) => {
   res.send("Server is running...");
 });
 
-app.use("/areas",  areaRoutes);
-app.use("/dustbins",  dustbinRoutes);
+app.use("/areas", areaRoutes);
+app.use("/dustbins", dustbinRoutes);
 app.use("/vehicles", authMiddleware, vehicleRoutes);
 app.use("/drivers", authMiddleware, driverRoutes);
 app.use("/driver-login", driverLoginRoutes);
@@ -140,4 +162,4 @@ server.listen(port, () => {
   console.log(`Server is listening on http://localhost:${port}`);
 });
 
-export { io }; 
+export { io };
