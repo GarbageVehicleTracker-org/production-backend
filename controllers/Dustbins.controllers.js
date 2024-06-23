@@ -62,7 +62,7 @@ class DustbinController {
 
     try {
       // Find all dustbins with the matching areaId prefix
-      const dustbins = await Dustbin.findOne({ areaId: areaId });
+      const dustbins = await Dustbin.find({ areaId: areaId });
 
       if (!dustbins || dustbins.length === 0) {
         return res.status(404).json({ error: "No matching dustbins found" });
@@ -76,7 +76,7 @@ class DustbinController {
 
         return {
           dustbinId: dustbin._id,
-          areaId: dustbin.areaId.split("_")[0],
+          areaId: dustbin.areaId,
           middleCoordinates,
         };
       });
