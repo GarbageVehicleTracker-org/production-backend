@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
 app.use(helmet());
 
 // Cron job to access the URL every 30 seconds
-cron.schedule("*/30 * * * * *", async () => {
+cron.schedule("*/60 * * * * *", async () => {
   console.log("Accessing https://production-backend-3olq.onrender.com...");
   try {
     const response = await fetch(
@@ -80,7 +80,7 @@ cron.schedule("*/30 * * * * *", async () => {
   }
 });
 
-cron.schedule("*/30 * * * * *", async () => {
+cron.schedule("*/60 * * * * *", async () => {
   console.log("Accessing https://garbage-tracking-backend.onrender.com...");
   try {
     const response = await fetch(
