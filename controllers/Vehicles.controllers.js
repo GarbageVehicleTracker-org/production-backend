@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 import Vehicle from "../models/Vehicles.models.js";
 
 const validateVehicle = (req) => {
-  const { capacity, type, registrationNo } = req.body;
+  const { capacity, type, registrationNo, vehicleId } = req.body;
 
   // Add validation rules as needed
-  if (!capacity || !type || !registrationNo) {
+  if (!capacity || !type || !registrationNo || !vehicleId) {
     return { error: "Please provide all required fields" };
   }
 
@@ -18,14 +18,16 @@ const validateVehicle = (req) => {
 class VehicleController {
   async createVehicle(req, res) {
     try {
+      console.log(req.body);
       const validationError = validateVehicle(req);
       if (validationError) {
         return res.status(400).json({ error: validationError.error });
       }
 
-      const { capacity, type, registrationNo } = req.body;
+      const { capacity, type, registrationNo, vehicleId } = req.body;
 
       const newVehicle = new Vehicle({
+        vehicleId,
         capacity,
         type,
         registrationNo,
