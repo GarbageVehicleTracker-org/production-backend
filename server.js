@@ -68,29 +68,29 @@ io.on("connection", (socket) => {
 app.use(helmet());
 
 // Cron job to access the URL every 30 seconds
-cron.schedule("*/60 * * * * *", async () => {
-  console.log("Accessing https://production-backend-3olq.onrender.com...");
-  try {
-    const response = await fetch(
-      "https://production-backend-3olq.onrender.com"
-    );
-    console.log("Accessed **production-backend** with status:", response.status);
-  } catch (error) {
-    console.error("Error accessing URL:", error);
-  }
-});
+// cron.schedule("*/60 * * * * *", async () => {
+//   console.log("Accessing https://production-backend-3olq.onrender.com...");
+//   try {
+//     const response = await fetch(
+//       "https://production-backend-3olq.onrender.com"
+//     );
+//     console.log("Accessed **production-backend** with status:", response.status);
+//   } catch (error) {
+//     console.error("Error accessing URL:", error);
+//   }
+// });
 
-cron.schedule("*/60 * * * * *", async () => {
-  console.log("Accessing https://garbage-tracking-backend.onrender.com...");
-  try {
-    const response = await fetch(
-      "https://garbage-tracking-backend.onrender.com"
-    );
-    console.log("Accessed **garbage-tracking-backend** with status:", response.status);
-  } catch (error) {
-    console.error("Error accessing URL:", error);
-  }
-});
+// cron.schedule("*/60 * * * * *", async () => {
+//   console.log("Accessing https://garbage-tracking-backend.onrender.com...");
+//   try {
+//     const response = await fetch(
+//       "https://garbage-tracking-backend.onrender.com"
+//     );
+//     console.log("Accessed **garbage-tracking-backend** with status:", response.status);
+//   } catch (error) {
+//     console.error("Error accessing URL:", error);
+//   }
+// });
 
 cron.schedule("0 0 * * *", async () => {
   console.log("Running scheduled dustbin reset...");
